@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nota Prompt2Claude — Ts. Ruzbihan Bakhtiar × AnnurPro Solutions</title>
 <meta name="description" content="Nota panduan webinar Prompt2Claude — set up Claude, connector, skills, bina nota digital, game dan sistem.">
+<meta name="theme-color" content="#d97757">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ms_MY">
+<meta property="og:title" content="Nota Prompt2Claude — Ts. Ruzbihan Bakhtiar × AnnurPro Solutions">
+<meta property="og:description" content="Panduan webinar Prompt2Claude: set up Claude, connector, skills, bina nota digital, game dan sistem.">
+<script>document.documentElement.className+=" js"</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -367,9 +373,6 @@ footer small{font-size:12.5px;color:var(--muted)}
   h1{font-size:40px;letter-spacing:-1.6px;text-shadow:3px 3px 0 var(--dark)}
   .sechead h2{font-size:23px;letter-spacing:-.7px}
   .tabs{top:60px}
-  .certsheet{padding:28px 18px;border-width:5px;box-shadow:8px 8px 0 var(--orange)}
-  .certsheet .cn{font-size:25px}
-  .certsheet .cf{flex-direction:column;text-align:center}
   body{font-size:16px}
 }
 @media print{
@@ -377,9 +380,177 @@ footer small{font-size:12.5px;color:var(--muted)}
   body{background:#fff}
 }
 
+
+/* ================================================================
+   v2 : picker UI/UX, motion scroll, aksesibiliti, kontras
+   ================================================================ */
+:root{--onb:#141413}
+
+/* ---------- kontras: teks atas oren / hijau guna warna gelap ---------- */
+.tab.on,.secnum,.step.open .stepicon,.step.open .badge,.btn.pri,.chip.on,th,#toast,#top,
+.btn.ok,.step.done .stepicon,.step.done .badge,.chk.on span{color:var(--onb)}
+
+/* ---------- fokus papan kekunci ---------- */
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.gate input:focus-visible,.fb input:focus-visible,.fb textarea:focus-visible,.fb select:focus-visible,
+#certForm input:focus-visible,#certForm textarea:focus-visible,#d2gateform input:focus-visible{
+  outline:3px solid var(--blue);outline-offset:2px}
+.usty:has(input:focus-visible){outline:3px solid var(--blue);outline-offset:3px}
+
+/* ---------- pautan langkau ---------- */
+.skip{
+  position:absolute;left:12px;top:-70px;z-index:400;background:var(--brand);color:var(--onb);
+  border:var(--bw) solid var(--line);padding:9px 14px;font-weight:800;font-size:14px;
+  font-family:Poppins,Arial,sans-serif;text-decoration:none;box-shadow:4px 4px 0 var(--sh);transition:top .15s;
+}
+.skip:focus{top:10px}
+.noscript{
+  margin:0;padding:14px 18px;background:#f8ecd6;color:#141413;border-bottom:3px solid #141413;
+  font-family:Poppins,Arial,sans-serif;font-weight:700;font-size:14px;text-align:center;
+}
+
+/* ================================================================
+   PEMILIHAN UI / UX
+   ================================================================ */
+.uipick{margin-top:22px;padding-top:6px;border-top:var(--bw) dashed var(--line)}
+.uipick .uph{
+  font-family:Poppins,Arial,sans-serif;font-size:12.5px;font-weight:800;text-transform:uppercase;
+  letter-spacing:.5px;margin:16px 0 3px;
+}
+.uipick .uhint{display:block;font-size:13px;color:var(--muted);margin-bottom:11px}
+.ustyles{display:grid;grid-template-columns:repeat(auto-fill,minmax(172px,1fr));gap:14px 12px}
+.usty{
+  position:relative;display:flex;flex-direction:column;gap:7px;padding:10px 10px 12px;cursor:pointer;
+  border:var(--bw) solid var(--line);background:var(--card);box-shadow:4px 4px 0 var(--sh);
+  transition:transform .14s,box-shadow .14s,background .14s;
+}
+.fb .usty{display:flex;margin:0;font-size:inherit;font-weight:400;text-transform:none;letter-spacing:normal}
+.usty input{position:absolute;opacity:0;pointer-events:none}
+.usty .ut{display:flex;flex-direction:column;gap:3px;min-width:0}
+.usty b{display:block;font-size:13.5px;line-height:1.2;letter-spacing:-.2px;text-transform:none}
+.usty small{display:block;font-size:12.5px;color:var(--muted);line-height:1.4;font-family:Lora,Georgia,serif;text-transform:none;letter-spacing:0;font-weight:400}
+.usty .tick{
+  position:absolute;top:-3px;right:-3px;width:26px;height:26px;z-index:3;display:none;place-items:center;
+  background:var(--brand);color:var(--onb);border:var(--bw) solid var(--line);font-size:13px;font-weight:900;
+}
+.usty.sel{background:var(--brandsoft);box-shadow:6px 6px 0 var(--brand)}
+.usty.sel .tick{display:grid;animation:pop .35s cubic-bezier(.3,1.6,.5,1)}
+@media (hover:hover){ .usty:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--sh)} .usty.sel:hover{box-shadow:7px 7px 0 var(--brand)} }
+.upv{display:block;position:relative;height:62px;overflow:hidden;border:2px solid var(--line);flex:none}
+.upv>*{position:absolute;display:block}
+
+/* ---------- jadual cadangan gaya ---------- */
+.uxrules{counter-reset:ux;list-style:none;margin:0 0 14px!important}
+.uxrules li{
+  counter-increment:ux;position:relative;padding-left:40px;margin-bottom:10px;
+}
+.uxrules li::before{
+  content:counter(ux);position:absolute;left:0;top:1px;width:26px;height:26px;display:grid;place-items:center;
+  background:var(--brand);color:var(--onb);border:2px solid var(--line);font-size:12px;font-weight:800;
+  font-family:Poppins,Arial,sans-serif;
+}
+
+/* ================================================================
+   MOTION
+   ================================================================ */
+/* reveal bila scroll — hanya aktif kalau JS jalan */
+html.js .rv{
+  opacity:0;transform:translateY(28px);
+  transition:opacity .65s cubic-bezier(.2,.7,.2,1) var(--d,0ms),transform .65s cubic-bezier(.2,.7,.2,1) var(--d,0ms);
+}
+html.js .rv.rv-l{transform:translateX(-32px)}
+html.js .rv.rv-s{transform:translateY(22px) scale(.97)}
+html.js .rv.in{opacity:1;transform:none}
+html.js .rv.nt{transition:none}
+
+html.js .sechead.in .secnum{animation:pop .55s .1s cubic-bezier(.3,1.5,.5,1) backwards}
+@keyframes pop{from{transform:scale(.4) rotate(-14deg);opacity:0}}
+
+/* hero masuk */
+html.js .hero{animation:heroBox .8s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes heroBox{from{transform:translate(9px,9px);box-shadow:0 0 0 var(--sh)}}
+html.js .heroL>*{animation:rise .7s cubic-bezier(.2,.7,.2,1) backwards}
+html.js .heroL>*:nth-child(1){animation-delay:.12s}
+html.js .heroL>*:nth-child(2){animation-delay:.2s}
+html.js .heroL>*:nth-child(3){animation-delay:.28s}
+html.js .heroL>*:nth-child(4){animation-delay:.36s}
+html.js .heroL>*:nth-child(5){animation-delay:.44s}
+html.js .photoframe{animation:photoIn .95s .3s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}}
+@keyframes photoIn{from{opacity:0;transform:translate(28px,22px) rotate(3.5deg)}}
+.heroR{will-change:transform}
+.pill i{animation:blink 1.6s steps(1) infinite}
+@keyframes blink{50%{background:var(--dark)}}
+
+/* tukar tab, buka langkah, buka accordion */
+.tabpanel.on{animation:panelIn .5s cubic-bezier(.2,.7,.2,1)}
+@keyframes panelIn{from{opacity:0;transform:translateY(12px)}}
+.unlocked:not([hidden]){animation:unfold .5s cubic-bezier(.2,.7,.2,1)}
+.acc.on .accbody{animation:unfold .4s cubic-bezier(.2,.7,.2,1)}
+@keyframes unfold{from{opacity:0;transform:translateY(-10px)}}
+.acctop .ar{transition:transform .25s}
+.chk.pop .box{animation:tick .4s cubic-bezier(.3,1.6,.5,1)}
+@keyframes tick{0%{transform:scale(.5)}60%{transform:scale(1.28)}100%{transform:scale(1)}}
+
+/* progress membaca di sempadan topbar */
+.topbar{transition:box-shadow .2s}
+.topbar.sc{box-shadow:0 5px 0 var(--sh)}
+.rdprog{position:absolute;left:0;right:0;bottom:-3px;height:3px;pointer-events:none}
+.rdprog i{display:block;height:100%;width:0;background:var(--blue)}
+
+/* hover gaya brutalism */
+@media (hover:hover){
+  .btn:not(:disabled):hover,.tab:hover,.chk:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--sh)}
+  .chip:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--sh)}
+  .iconbtn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--sh)}
+  .acctop:hover{background:var(--brandsoft)}
+}
+.btn:not(:disabled):active,.tab:active,.chip:active,.iconbtn:active,.chk:active{
+  transform:translate(3px,3px);box-shadow:0 0 0 var(--sh)}
+.btn,.tab,.chip,.iconbtn,.chk{transition:transform .12s,box-shadow .12s,background .12s}
+
+/* confetti bila sijil dijana */
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:300}
+.confetti i{
+  position:absolute;top:-24px;opacity:0;border:2px solid #141413;
+  animation:fall linear forwards;
+}
+@keyframes fall{
+  0%{opacity:1;transform:translateY(-30px) rotate(0)}
+  85%{opacity:1}
+  100%{opacity:0;transform:translateY(108vh) rotate(720deg)}
+}
+
+/* hormati pengguna yang mahu kurang gerakan */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  html.js .rv{opacity:1!important;transform:none!important;transition:none!important}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .heroR{transform:none!important}
+}
+
+@media (max-width:480px){
+  .ustyles{grid-template-columns:minmax(0,1fr);gap:14px}
+  .usty{flex-direction:row;align-items:center;gap:12px}
+  .usty .upv{width:108px;height:68px}
+  .usty .ut{padding-right:20px}
+  .stepbody{padding-left:13px;padding-right:13px}
+  .fb{padding:15px 13px}
+}
+
+/* kemas: nota dalam langkah tak perlu ruang kosong bawah, teks tebal dalam senarai lebih jelas */
+.stepbody .note p,.accbody .note p{margin-bottom:0}
+.stepbody li strong,.accbody li strong{color:var(--ink)}
+@media print{
+  .skip,.rdprog,.confetti,.uipick,.copybtn{display:none!important}
+  html.js .rv{opacity:1!important;transform:none!important}
+  *{animation:none!important}
+}
 </style>
 </head>
 <body>
+<a class="skip" href="#kandungan">Terus ke kandungan</a>
+<noscript><p class="noscript">Nota ni perlukan JavaScript. Sila hidupkan JavaScript dalam browser anda.</p></noscript>
 
 <div class="topbar">
   <div class="topbar-in">
@@ -388,8 +559,9 @@ footer small{font-size:12.5px;color:var(--muted)}
       <div class="bar"><i id="barFill"></i></div>
       <div class="tb-pct" id="barPct">0%</div>
     </div>
-    <button class="iconbtn" id="themeBtn" title="Tukar tema">☾</button>
+    <button class="iconbtn" id="themeBtn" title="Tukar tema" aria-label="Tukar tema">☾</button>
   </div>
+  <div class="rdprog" aria-hidden="true"><i id="rdFill"></i></div>
 </div>
 
 <div class="wrap">
@@ -410,7 +582,7 @@ footer small{font-size:12.5px;color:var(--muted)}
 
       <div class="pill"><i></i> Nota Webinar</div>
       <h1>Prompt2Claude</h1>
-      <p class="lede">Panduan lengkap guna Claude dari sifar — set up, connector, skills, bina nota digital, game dan sistem. Ikut turutan, salin prompt, siapkan sendiri.</p>
+      <p class="lede">Panduan lengkap guna Claude dari sifar: set up, connector, skills, bina nota digital, game dan sistem. Ikut turutan, salin prompt, siapkan sendiri.</p>
 
       <div class="byline">
         <div class="avatar">👤</div>
@@ -430,7 +602,7 @@ footer small{font-size:12.5px;color:var(--muted)}
     <div class="note">
       <div class="ic">🧭</div>
       <div>
-        <p><strong>Cara guna nota ni:</strong> Nota ada dua tab — <strong>Hari 1</strong> (17/10, 9–11 malam) dan <strong>Hari 2</strong> (18/10, 9–11 pagi). Setiap tab dibuka dengan kunci yang diberi semasa webinar bermula. Dalam setiap tab, langkah terbuka satu per satu ikut turutan.</p>
+        <p><strong>Cara guna nota ni:</strong> Nota ada dua tab: <strong>Hari 1</strong> (17/10, 9–11 malam) dan <strong>Hari 2</strong> (18/10, 9–11 pagi). Setiap tab dibuka dengan kunci yang diberi semasa webinar bermula. Dalam setiap tab, langkah terbuka satu per satu ikut turutan.</p>
         <p>Kemajuan anda disimpan automatik dalam browser ini. Boleh tutup dan sambung semula bila-bila.</p>
         <p><strong>⏱️ Anggaran masa: 2 jam setiap hari.</strong></p>
       </div>
@@ -439,13 +611,13 @@ footer small{font-size:12.5px;color:var(--muted)}
     <div class="note warn">
       <div class="ic">⚠️</div>
       <div>
-        <p><strong>Antara muka Claude kerap berubah.</strong> Nama menu dan kedudukan butang dalam nota ni betul pada tarikh webinar. Kalau anda buka nota ni beberapa bulan kemudian dan tak jumpa sesuatu menu, cari nama yang hampir sama dalam Settings — fungsinya biasanya masih ada.</p>
+        <p><strong>Antara muka Claude kerap berubah.</strong> Nama menu dan kedudukan butang dalam nota ni betul pada tarikh webinar. Kalau anda buka nota ni beberapa bulan kemudian dan tak jumpa sesuatu menu, cari nama yang hampir sama dalam Settings. Fungsinya biasanya masih ada.</p>
       </div>
     </div>
   </div>
 
   <!-- ================= TABS ================= -->
-  <div class="tabs">
+  <div class="tabs" id="kandungan">
     <div class="tabrow">
       <button class="tab on" data-tab="d1">🔑 Hari 1 <small>17/10 · malam</small></button>
       <button class="tab" data-tab="d2">💻 Hari 2 <small>18/10 · pagi</small></button>
@@ -473,10 +645,10 @@ footer small{font-size:12.5px;color:var(--muted)}
       <div class="acctop">🗂️ Sidebar &amp; chat <span class="ar">▼</span></div>
       <div class="accbody">
         <ul>
-          <li><strong>New chat</strong> — mula perbualan baharu. Satu topik satu chat, jangan campur semua dalam satu chat panjang.</li>
-          <li><strong>Senarai chat</strong> — semua perbualan lepas tersimpan di sini dan boleh dicari.</li>
-          <li><strong>Model picker</strong> — pilih model dalam kotak chat. Model yang lebih kuat sesuai untuk kerja susah (bina sistem, analisis), model yang lebih pantas sesuai untuk kerja ringan (ringkas, terjemah).</li>
-          <li><strong>Butang lampiran</strong> — upload fail: PDF, Word, Excel, gambar. Ini cara paling pantas bagi Claude konteks.</li>
+          <li><strong>New chat</strong>: mula perbualan baharu. Satu topik satu chat, jangan campur semua dalam satu chat panjang.</li>
+          <li><strong>Senarai chat</strong>: semua perbualan lepas tersimpan di sini dan boleh dicari.</li>
+          <li><strong>Model picker</strong>: pilih model dalam kotak chat. Model yang lebih kuat sesuai untuk kerja susah (bina sistem, analisis), model yang lebih pantas sesuai untuk kerja ringan (ringkas, terjemah).</li>
+          <li><strong>Butang lampiran</strong>: upload fail: PDF, Word, Excel, gambar. Ini cara paling pantas bagi Claude konteks.</li>
         </ul>
       </div>
     </div>
@@ -485,7 +657,7 @@ footer small{font-size:12.5px;color:var(--muted)}
       <div class="acctop">📁 Projects <span class="ar">▼</span></div>
       <div class="accbody">
         <p>Project ialah folder untuk satu kerja besar. Semua chat dalam project kongsi arahan dan fail yang sama. Contoh untuk guru: satu project untuk satu subjek, satu project untuk kerja pentadbiran.</p>
-        <p>Dalam project, ada ruang untuk <strong>arahan project</strong> — ini tempat anda tulis sekali, Claude ikut dalam semua chat project tu. Kita isi ruang ni dalam Bahagian 2.</p>
+        <p>Dalam project, ada ruang untuk <strong>arahan project</strong>: ini tempat anda tulis sekali, Claude ikut dalam semua chat project tu. Kita isi ruang ni dalam Bahagian 2.</p>
       </div>
     </div>
 
@@ -501,10 +673,10 @@ footer small{font-size:12.5px;color:var(--muted)}
       <div class="acctop">⚙️ Settings — yang anda patut tahu <span class="ar">▼</span></div>
       <div class="accbody">
         <ul>
-          <li><strong>Profile / Preferences</strong> — cara anda nak Claude bercakap dengan anda. Tulis sekali, kekal untuk semua chat.</li>
-          <li><strong>Connectors</strong> — sambung Google Drive, Gmail, Calendar. Kita buat dalam Bahagian 3.</li>
-          <li><strong>Skills / Capabilities</strong> — resipi kerja yang Claude simpan. Kita buat dalam Bahagian 4.</li>
-          <li><strong>Memory</strong> — Claude ingat perkara penting antara chat. Boleh dihidupkan atau dimatikan.</li>
+          <li><strong>Profile / Preferences</strong>: cara anda nak Claude bercakap dengan anda. Tulis sekali, kekal untuk semua chat.</li>
+          <li><strong>Connectors</strong>: sambung Google Drive, Gmail, Calendar. Kita buat dalam Bahagian 3.</li>
+          <li><strong>Skills / Capabilities</strong>: resipi kerja yang Claude simpan. Kita buat dalam Bahagian 4.</li>
+          <li><strong>Memory</strong>: Claude ingat perkara penting antara chat. Boleh dihidupkan atau dimatikan.</li>
         </ul>
       </div>
     </div>
@@ -979,6 +1151,71 @@ Lepas tu, berdasarkan kerja saya sebagai [peranan anda], cadangkan 3 skill yang 
         <div class="unlocked" hidden>
           <p>Isi borang di bawah, prompt akan terbina sendiri. Salin, upload bahan anda ke chat, paste prompt.</p>
 
+          <div class="acc">
+            <div class="acctop">🎨 Cara pilih UI/UX yang memudahkan pengguna <span class="ar">▼</span></div>
+            <div class="accbody">
+              <p><strong>UI</strong> ialah rupa: warna, bentuk, gaya. <strong>UX</strong> ialah rasa bila guna: senang atau menyusahkan. Kalau anda tak sebut apa-apa, Claude akan pilih rupa yang generik. Sebab tu kita pilih sendiri, dan pilih ikut siapa yang akan guna.</p>
+
+              <h4>Tiga soalan sebelum pilih</h4>
+              <ul>
+                <li><strong>Siapa yang guna?</strong> Pelajar sekolah rendah, guru, atau staf pentadbir. Tahap selesa mereka dengan teknologi lain-lain.</li>
+                <li><strong>Mereka guna di mana?</strong> Di telefon, di komputer, atau dipancar di skrin kelas.</li>
+                <li><strong>Berapa lama setiap kali guna?</strong> Sekejap sahaja atau berjam-jam. Kalau berjam-jam, latar yang terlalu terang cepat memenatkan mata.</li>
+              </ul>
+
+              <h4>Cadangan gaya ikut keadaan</h4>
+              <div class="tblwrap">
+                <table>
+                  <tr><th>Keadaan</th><th>Gaya dicadangkan</th><th>Sebab</th></tr>
+                  <tr><td>Game untuk pelajar</td><td>Claymorphism, Neo-Brutalism</td><td>Besar, berwarna, jelas mana yang boleh ditekan</td></tr>
+                  <tr><td>Nota atau bahan bacaan</td><td>Minimalist Flat</td><td>Bersih, mata fokus pada isi</td></tr>
+                  <tr><td>Kerja harian guru dan staf</td><td>Minimalist Flat, Material Design 3</td><td>Rupa yang ramai dah biasa dengan aplikasi Google</td></tr>
+                  <tr><td>Dashboard banyak data</td><td>Bento Grid, Dark Executive</td><td>Maklumat dikumpul dalam kotak, mudah diimbas</td></tr>
+                  <tr><td>Dipancar di kelas atau dewan</td><td>Dark Executive, Minimalist Flat</td><td>Kontras tinggi, boleh dibaca dari belakang</td></tr>
+                  <tr><td>Pengguna kurang biasa teknologi</td><td>Minimalist Flat</td><td>Tiada hiasan yang mengelirukan</td></tr>
+                  <tr><td>Laman promosi atau kreatif</td><td>Glassmorphism, Aurora Gradient</td><td>Menarik, tapi kurang sesuai kalau skrin penuh teks</td></tr>
+                </table>
+              </div>
+              <div class="note">
+                <div class="ic">💭</div>
+                <div><p>Jadual ni cadangan berdasarkan logik reka bentuk, bukan hasil kajian. Cuba dua gaya dan tengok mana yang pengguna anda lebih selesa.</p></div>
+              </div>
+
+              <h4>Lima peraturan UX yang paling kerap diabaikan</h4>
+              <ol class="uxrules">
+                <li><strong>Satu skrin, satu tujuan utama.</strong> Kalau pengguna terpaksa fikir "nak tekan yang mana", skrin tu terlalu sesak.</li>
+                <li><strong>Butang cukup besar untuk ibu jari.</strong> Saiz yang biasa disyorkan ialah sekurang-kurangnya 44 piksel tinggi dan lebar.</li>
+                <li><strong>Teks dan latar cukup kontras.</strong> Garis panduan umum (WCAG) minta nisbah sekurang-kurangnya 4.5 kepada 1 untuk teks biasa. Teks kelabu cair atas latar putih selalunya gagal.</li>
+                <li><strong>Beri maklum balas selepas setiap tindakan.</strong> Lepas tekan butang simpan, pengguna patut nampak sesuatu: "Berjaya disimpan" atau "Gagal, cuba lagi".</li>
+                <li><strong>Mesej ralat beritahu apa nak buat.</strong> "Ralat 500" tak membantu sesiapa. "Emel ni tak sah, semak ada tanda @" membantu.</li>
+              </ol>
+
+              <h4>Lepas siap: minta Claude semak UX</h4>
+              <p>Jangan tunggu pengguna mengadu. Minta Claude jadi pengguna pertama yang kritis.</p>
+              <div class="promptwrap">
+                <div class="promptlabel"><b>Prompt semakan UX</b><small>Ganti bahagian dalam [ ]</small></div>
+                <pre class="prompt">Semak antara muka yang baru anda bina dari sudut UX.
+
+Pengguna saya ialah [siapa, contoh: guru yang tak biasa dengan teknologi], dan mereka guna di [telefon / komputer / skrin kelas].
+
+Senaraikan:
+1. Lima perkara yang mungkin mengelirukan pengguna, dengan cadangan pembetulan untuk setiap satu.
+2. Mana-mana butang, teks atau warna yang terlalu kecil atau kurang kontras.
+3. Satu perkara yang dah baik dan patut dikekalkan.
+
+Jangan ubah apa-apa lagi. Beri senarai dulu, saya akan pilih mana yang nak dibetulkan.</pre>
+                <div class="btnrow"><button class="btn pri copybtn">📋 Salin prompt</button></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="note">
+            <div class="ic">🎨</div>
+            <div><p><strong>Gaya UI jadi sebahagian prompt.</strong> Di hujung borang ada pilihan gaya UI, tema dan ciri mesra pengguna. Apa yang anda pilih terus masuk ke dalam prompt. Buka jadual cadangan di atas kalau tak pasti nak pilih yang mana.</p></div>
+          </div>
+
+
+
           <div class="fb">
             <h5>Butiran nota anda</h5>
             <label>Tajuk nota</label>
@@ -995,11 +1232,11 @@ Lepas tu, berdasarkan kerja saya sebagai [peranan anda], cadangkan 3 skill yang 
               <button class="chip on" data-v="langkah berkunci secara turutan — langkah seterusnya hanya terbuka selepas langkah sebelumnya ditanda siap">Langkah berkunci</button>
               <button class="chip on" data-v="butang salin untuk setiap kotak teks penting">Butang salin</button>
               <button class="chip on" data-v="kuiz ringkas pelbagai pilihan di hujung dengan jawapan dan penjelasan">Kuiz hujung</button>
-              <button class="chip" data-v="mod gelap dan mod cerah dengan butang tukar">Dark mode</button>
-              <button class="chip" data-v="halaman sijil yang boleh dicetak selepas semua langkah selesai">Sijil</button>
+                <button class="chip" data-v="halaman sijil yang boleh dicetak selepas semua langkah selesai">Sijil</button>
             </div>
             <label>Tambahan (pilihan)</label>
             <textarea class="fbin" data-t="ntambah" placeholder="contoh: masukkan 3 contoh pengiraan, guna warna biru sebagai warna utama"></textarea>
+            <div class="uipick" data-ui="nota"></div>
           </div>
 
           <div class="promptwrap">
@@ -1063,6 +1300,7 @@ Lepas tu, berdasarkan kerja saya sebagai [peranan anda], cadangkan 3 skill yang 
             <input type="text" class="fbin" data-t="gtahap" value="pelajar Tingkatan 4">
             <label>Bilangan soalan / item</label>
             <select class="fbin" data-t="gbil"><option>8</option><option selected>10</option><option>15</option><option>20</option></select>
+            <div class="uipick" data-ui="game"></div>
           </div>
 
           <div class="promptwrap">
@@ -1195,9 +1433,9 @@ Lepas tu, berdasarkan kerja saya sebagai [peranan anda], cadangkan 3 skill yang 
 
           <h4>Tiga perkataan yang anda akan jumpa</h4>
           <ul>
-            <li><strong>Commit</strong> — simpan satu versi. Macam "Save As" tapi simpan sejarah.</li>
-            <li><strong>Push</strong> — hantar versi tu ke internet.</li>
-            <li><strong>Repository (repo)</strong> — folder projek anda di GitHub.</li>
+            <li><strong>Commit</strong>: simpan satu versi. Macam "Save As" tapi simpan sejarah.</li>
+            <li><strong>Push</strong>: hantar versi tu ke internet.</li>
+            <li><strong>Repository (repo)</strong>: folder projek anda di GitHub.</li>
           </ul>
 
           <div class="note warn">
@@ -1377,6 +1615,7 @@ Semua tindakan disimpan untuk rujukan dan audit</pre>
             <textarea class="fbin" data-t="sdata">Tajuk task, siapa buat, tarikh mula, tarikh akhir, keutamaan, status (belum, sedang, siap), catatan.</textarea>
             <label>Ciri wajib</label>
             <textarea class="fbin" data-t="sciri">Paparan kalendar bulanan, senarai task boleh tapis ikut status, tambah dan edit task, tanda siap sekali klik, kiraan ringkas berapa task siap dan berapa lewat.</textarea>
+            <div class="uipick" data-ui="sys"></div>
           </div>
 
           <div class="promptwrap">
@@ -1433,6 +1672,20 @@ Content-Type: text/plain;charset=utf-8 supaya tidak kena CORS error.
 
 Saya bukan programmer. Terangkan guna bahasa harian, bukan istilah teknikal.</pre>
             <div class="btnrow"><button class="btn pri copybtn">📋 Salin prompt</button></div>
+          </div>
+
+          <h4>Peringkat 2: paparan</h4>
+          <p>Bila Peringkat 1 dah jalan dan anda dah sahkan, barulah guna prompt di bawah. Ia ambil gaya UI dan pilihan UX yang anda tetapkan di langkah rangka tadi, jadi paparan ikut apa yang anda pilih. Nak tukar gaya? Naik semula ke langkah rangka, tukar pilihan di sana, dan prompt ni berubah sama.</p>
+
+          <div class="promptwrap">
+            <div class="promptlabel"><b>Prompt peringkat paparan</b><small>Kemaskini automatik</small></div>
+            <pre class="prompt" data-tpl="paparan">—</pre>
+            <div class="btnrow"><button class="btn pri copybtn">📋 Salin prompt</button></div>
+          </div>
+
+          <div class="note">
+            <div class="ic">👀</div>
+            <div><p><strong>Lepas paparan siap, minta Claude semak UX.</strong> Guna prompt semakan UX dalam jadual cadangan di Bahagian 5 (tab Hari 1). Lima minit di sini selalunya jumpa benda yang anda tak perasan.</p></div>
           </div>
 
           <div class="note warn">
@@ -1815,13 +2068,13 @@ function jawab(ok,mesej){
 </div>
 
   <footer>
-    <p>Nota <strong>Prompt2Claude</strong> — <strong>Ts. Ruzbihan Bakhtiar</strong> · AnnurPro Solutions</p>
+    <p>Nota <strong>Prompt2Claude</strong>: <strong>Ts. Ruzbihan Bakhtiar</strong> · AnnurPro Solutions</p>
     <small>Professional Technologist (MBOT) · AI Trainer · System Developer</small><br>
     <small>Kemajuan anda disimpan dalam browser ini sahaja.</small>
   </footer>
 </div>
 
-<button id="top">↑</button>
+<button id="top" aria-label="Kembali ke atas">↑</button>
 <div id="toast">Disalin</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1848,6 +2101,8 @@ function $$(s,r){ return Array.prototype.slice.call((r||document).querySelectorA
 
 /* ---------- toast ---------- */
 var toastEl = $("#toast"), toastT;
+var RM = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+function smooth(){ return RM ? "auto" : "smooth"; }
 function toast(msg){
   toastEl.textContent = msg; toastEl.classList.add("on");
   clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove("on"); }, 1800);
@@ -1865,21 +2120,14 @@ themeBtn.addEventListener("click", function(){
   state.theme = t; save(); applyTheme(t);
 });
 
-/* ---------- tabs ---------- */
-$$(".tab").forEach(function(b){
-  b.addEventListener("click", function(){
-    $$(".tab").forEach(function(x){ x.classList.remove("on"); });
-    $$(".tabpanel").forEach(function(x){ x.classList.remove("on"); });
-    b.classList.add("on");
-    var p = document.getElementById("tab-" + b.dataset.tab);
-    if(p) p.classList.add("on");
-    window.scrollTo({top:0, behavior:"smooth"});
-  });
-});
+/* tab: lihat showTab() dan initA11y() */
 
 /* ---------- accordion ---------- */
 $$(".acctop").forEach(function(t){
-  t.addEventListener("click", function(){ t.parentElement.classList.toggle("on"); });
+  t.addEventListener("click", function(){
+    var open = t.parentElement.classList.toggle("on");
+    t.setAttribute("aria-expanded", open ? "true" : "false");
+  });
 });
 
 /* ---------- copy ---------- */
@@ -1901,7 +2149,13 @@ document.addEventListener("click", function(e){
   if(!b) return;
   var wrap = b.closest(".promptwrap");
   var pre = wrap ? wrap.querySelector("pre.prompt") : null;
-  if(pre) copyText(pre.textContent);
+  if(pre){
+    copyText(pre.textContent);
+    var old = b.dataset.old || b.innerHTML; b.dataset.old = old;
+    b.innerHTML = "✓ Disalin"; b.classList.add("ok");
+    clearTimeout(b._t);
+    b._t = setTimeout(function(){ b.innerHTML = old; b.classList.remove("ok"); }, 1500);
+  }
 });
 
 /* ============================================================
@@ -1955,6 +2209,7 @@ var TPL = {
       + "SUMBER KANDUNGAN\n"
       + "Guna fail yang saya upload. Ringkaskan isinya, susun semula jadi " + (val("nlangkah")||"5") + " bahagian yang mengalir ikut turutan belajar. Jangan tambah kandungan yang tiada dalam fail saya. Kalau ada bahagian yang tak lengkap, beritahu saya, jangan reka sendiri.\n\n"
       + "CIRI YANG MESTI ADA\n" + ftxt + "\n\n"
+      + uiText("nota") + "\n"
       + "SYARAT TEKNIKAL\n"
       + "- Satu fail HTML sahaja. Semua CSS dan JavaScript di dalam fail tu. Tiada fail luar, tiada CDN.\n"
       + "- Kemajuan pembaca disimpan dalam localStorage, dengan try/catch supaya tak rosak kalau storan disekat.\n"
@@ -1976,6 +2231,7 @@ var TPL = {
       + "2. Maklum balas serta-merta setiap kali jawab. Kalau salah, tunjuk jawapan betul dan terangkan kenapa dalam satu ayat.\n"
       + "3. Papan markah di hujung, dengan butang main semula.\n"
       + "4. Soalan disusun rawak setiap kali main.\n\n"
+      + uiText("game") + "\n"
       + "SYARAT TEKNIKAL\n"
       + "- Satu fail HTML sahaja. Tiada fail luar, tiada CDN.\n"
       + "- Boleh dimain guna tetikus dan guna skrin sentuh.\n"
@@ -1991,21 +2247,201 @@ var TPL = {
       + "PENGGUNA DAN PERANAN\n" + (val("spengguna")||"[siapa guna]") + "\n\n"
       + "DATA YANG DISIMPAN\n" + (val("sdata")||"[data apa]") + "\n\n"
       + "CIRI WAJIB\n" + (val("sciri")||"[ciri apa]") + "\n\n"
+      + uiText("sys") + "\n"
       + "JANGAN TULIS KOD DULU. Yang saya nak sekarang ialah rancangan:\n"
-      + "1. Senarai skrin yang sistem ni perlukan, dan apa fungsi setiap satu.\n"
+      + "1. Senarai skrin yang sistem ni perlukan, apa fungsi setiap satu, dan bagaimana gaya UI serta ciri mesra pengguna di atas diterapkan pada skrin utama.\n"
       + "2. Struktur data — maklumat apa disimpan di mana.\n"
       + "3. Cadangan teknologi, dan kenapa anda pilih yang tu untuk orang bukan programmer. Utamakan yang percuma dan mudah diselenggara.\n"
       + "4. Senarai peringkat pembinaan ikut turutan, dari yang paling asas.\n"
       + "5. Tiga perkara dalam permintaan saya yang anda rasa akan jadi masalah kemudian, dan cadangan anda.\n\n"
       + "Kalau ada maklumat penting yang saya belum beritahu, tanya saya sekarang sebelum buat rancangan.";
   },
+  paparan: function(){
+    return "Peringkat 1 dah berjaya. Sekarang PERINGKAT 2: paparan (frontend) sahaja.\n\n"
+      + "SISTEM: " + (val("stajuk")||"[nama sistem]") + "\n\n"
+      + "Bina satu fail index.html (HTML, CSS dan JavaScript biasa, tanpa framework) yang sambung ke Apps Script yang kita dah buat.\n\n"
+      + uiText("sys") + "\n"
+      + "PERATURAN\n"
+      + "1. Bina paparan sahaja. Jangan ubah kod Apps Script melainkan saya minta.\n"
+      + "2. Letak URL Apps Script di satu pembolehubah di bahagian atas fail supaya senang saya tukar.\n"
+      + "3. Guna Content-Type: text/plain;charset=utf-8 untuk semua panggilan ke Apps Script.\n"
+      + "4. Bina skrin utama dulu. Tunjuk kepada saya, tunggu saya sahkan, baru sambung skrin lain.\n"
+      + "5. Lepas siap, terangkan dalam bahasa mudah cara saya uji di komputer, dan apa yang patut saya semak di telefon.\n\n"
+      + "Saya bukan programmer. Terangkan guna bahasa harian.";
+  },
 };
+
+/* ============================================================
+   PEMILIHAN UI / UX  (corak sama macam Prompt2Dashboard, ditambah
+   pratonton visual dan pilihan UX mesra pengguna)
+   ============================================================ */
+var UI_STYLES = [
+  { id:"Glassmorphism", d:"Kaca lutsinar, blur, border halus",
+    pv:'<span style="inset:0;background:linear-gradient(135deg,#6a9bcc,#d97757 70%,#e8c36a)"></span>'
+     + '<span style="left:14px;right:14px;top:10px;bottom:10px;background:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.75);border-radius:9px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)"></span>'
+     + '<span style="left:24px;top:19px;width:44%;height:6px;border-radius:3px;background:rgba(255,255,255,.9)"></span>'
+     + '<span style="left:24px;top:32px;width:62%;height:5px;border-radius:3px;background:rgba(255,255,255,.6)"></span>' },
+  { id:"Neumorphism (Soft UI)", d:"Bayang lembut, butang timbul-tenggelam",
+    pv:'<span style="inset:0;background:#e0e5ec"></span>'
+     + '<span style="left:12px;top:11px;width:46%;height:36px;border-radius:11px;background:#e0e5ec;box-shadow:5px 5px 9px #a3b1c6,-5px -5px 9px #fff"></span>'
+     + '<span style="right:16px;top:13px;width:32px;height:32px;border-radius:50%;background:#e0e5ec;box-shadow:inset 4px 4px 7px #a3b1c6,inset -4px -4px 7px #fff"></span>' },
+  { id:"Bento Grid", d:"Grid kotak pelbagai saiz, kemas",
+    pv:'<span style="inset:0;background:#efede4"></span>'
+     + '<span style="inset:6px;display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:4px">'
+     + '<span style="position:static;grid-row:span 2;background:#d97757;border-radius:6px"></span>'
+     + '<span style="position:static;background:#6a9bcc;border-radius:6px"></span>'
+     + '<span style="position:static;background:#788c5d;border-radius:6px"></span>'
+     + '<span style="position:static;grid-column:span 2;background:#141413;border-radius:6px"></span></span>' },
+  { id:"Material Design 3", d:"Standard Google, elevation & dynamic color",
+    pv:'<span style="inset:0;background:#fef7ff"></span>'
+     + '<span style="left:10px;right:10px;top:9px;height:32px;border-radius:14px;background:#ece6f0;box-shadow:0 1px 2px rgba(0,0,0,.3),0 1px 3px 1px rgba(0,0,0,.15)"></span>'
+     + '<span style="left:20px;top:19px;width:40%;height:6px;border-radius:3px;background:#6750a4"></span>'
+     + '<span style="right:12px;bottom:6px;width:30px;height:20px;border-radius:10px;background:#eaddff;box-shadow:0 1px 3px rgba(0,0,0,.35)"></span>' },
+  { id:"Minimalist Flat", d:"Bersih, tiada bayang, fokus pada data",
+    pv:'<span style="inset:0;background:#fff"></span>'
+     + '<span style="left:12px;top:11px;width:30%;height:6px;background:#141413"></span>'
+     + '<span style="left:12px;top:25px;width:70%;height:4px;background:#d9d9d9"></span>'
+     + '<span style="left:12px;top:34px;width:56%;height:4px;background:#d9d9d9"></span>'
+     + '<span style="right:12px;bottom:8px;width:34px;height:12px;border:2px solid #141413"></span>' },
+  { id:"Neo-Brutalism", d:"Border tebal, warna terang, bayang keras",
+    pv:'<span style="inset:0;background:#f4efe0"></span>'
+     + '<span style="left:12px;top:11px;width:50%;height:34px;background:#d97757;border:3px solid #141413;box-shadow:4px 4px 0 #141413"></span>'
+     + '<span style="right:16px;top:15px;width:24px;height:24px;background:#6a9bcc;border:3px solid #141413;box-shadow:3px 3px 0 #141413"></span>' },
+  { id:"Claymorphism", d:"Bentuk bulat gebu, rasa 3D lembut",
+    pv:'<span style="inset:0;background:#ffe3ef"></span>'
+     + '<span style="left:12px;top:10px;width:48%;height:38px;border-radius:17px;background:#ffb3d1;box-shadow:inset -4px -5px 8px rgba(0,0,0,.14),inset 4px 5px 8px rgba(255,255,255,.85),4px 6px 10px rgba(180,60,110,.28)"></span>'
+     + '<span style="right:14px;top:13px;width:34px;height:34px;border-radius:50%;background:#b8a1ff;box-shadow:inset -4px -5px 8px rgba(0,0,0,.14),inset 4px 5px 8px rgba(255,255,255,.85),4px 6px 10px rgba(90,60,180,.28)"></span>' },
+  { id:"Aurora Gradient", d:"Gradient lembut berwarna, moden",
+    pv:'<span style="inset:0;background:radial-gradient(circle at 18% 30%,#5eead4,transparent 55%),radial-gradient(circle at 84% 22%,#a78bfa,transparent 55%),radial-gradient(circle at 60% 95%,#f472b6,transparent 60%),#1e1b4b"></span>'
+     + '<span style="left:14px;right:14px;top:12px;height:34px;border-radius:10px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4)"></span>'
+     + '<span style="left:24px;top:23px;width:40%;height:5px;border-radius:3px;background:rgba(255,255,255,.85)"></span>' },
+  { id:"Dark Executive", d:"Gelap, korporat, kontras tinggi",
+    pv:'<span style="inset:0;background:#0f172a"></span>'
+     + '<span style="left:12px;top:10px;width:26px;height:5px;background:#94a3b8"></span>'
+     + '<span style="left:14px;bottom:8px;width:11px;height:20px;background:#c9a227"></span>'
+     + '<span style="left:30px;bottom:8px;width:11px;height:32px;background:#c9a227"></span>'
+     + '<span style="left:46px;bottom:8px;width:11px;height:26px;background:#c9a227"></span>'
+     + '<span style="right:12px;top:12px;width:34%;height:4px;background:#334155"></span>'
+     + '<span style="right:12px;top:22px;width:26%;height:4px;background:#334155"></span>' },
+  { id:"Retro Terminal", d:"Monospace, gaya konsol, nostalgik",
+    pv:'<span style="inset:0;background:#000"></span>'
+     + '<span style="left:9px;top:8px;font:700 11px/1.5 ui-monospace,Menlo,monospace;color:#33ff33;white-space:nowrap">$ jalan nota<br>&gt; siap_</span>' }
+];
+
+var UI_DEFAULT = { nota:"Minimalist Flat", game:"Claymorphism", sys:"Bento Grid" };
+
+var UX_OPTS = [
+  { l:"Butang besar",        v:"butang besar dan jelas, senang ditekan dengan ibu jari di telefon (sekurang-kurangnya 44px)" },
+  { l:"Teks jelas",          v:"teks cukup besar dengan kontras tinggi supaya senang dibaca, termasuk bila dipancar di skrin kelas" },
+  { l:"Mobile-first",        v:"reka untuk skrin telefon dahulu, kemudian skala ke komputer" },
+  { l:"Satu tindakan utama", v:"satu tindakan utama pada setiap skrin, tak sesak dengan terlalu banyak pilihan" },
+  { l:"Maklum balas jelas",  v:"maklum balas selepas setiap tindakan (sedang memuat, berjaya atau gagal), dan mesej ralat dalam Bahasa Melayu yang mudah serta beritahu apa yang perlu dibuat" },
+  { l:"Bahasa harian",       v:"label butang dan menu dalam bahasa harian, tiada istilah teknikal" },
+  { l:"Papan kekunci",       v:"boleh dikendalikan dengan papan kekunci sahaja, dan kotak yang sedang dipilih nampak jelas" },
+  { l:"Sahkan sebelum padam",v:"minta pengesahan sebelum padam atau buat tindakan yang tak boleh diundur" }
+];
+var UX_DEFAULT = { nota:[0,1,2], game:[0,1,2,4], sys:[0,1,2,4,7] };
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+function lc(s){ return s.charAt(0).toLowerCase() + s.slice(1); }
+
+function buildUiPickers(){
+  $$(".uipick").forEach(function(box){
+    var p = box.dataset.ui, h = "";
+    h += '<div class="uph">Gaya UI</div>';
+    h += '<span class="uhint">Pilih <b>satu</b>. Kalau tak pasti, buka jadual cadangan di Bahagian 5 (tab Hari 1).</span>';
+    h += '<div class="ustyles" data-ui="'+p+'" role="radiogroup" aria-label="Gaya UI">';
+    UI_STYLES.forEach(function(s){
+      var on = s.id === UI_DEFAULT[p];
+      h += '<label class="usty'+(on?' sel':'')+'"><input type="radio" name="ui-'+p+'" value="'+esc(s.id)+'"'+(on?' checked':'')+'>'
+        +  '<span class="tick" aria-hidden="true">✓</span>'
+        +  '<span class="upv" aria-hidden="true">'+s.pv+'</span>'
+        +  '<span class="ut"><b>'+esc(s.id)+'</b><small>'+esc(s.d)+'</small></span></label>';
+    });
+    h += '</div>';
+
+    h += '<div class="uph">Tema warna</div><span class="uhint">Boleh pilih satu atau kedua-duanya.</span>';
+    h += '<div class="chips" role="group" aria-label="Tema warna" data-group="tema-'+p+'" data-multi="1">'
+      +  '<button type="button" class="chip on" data-v="light">☀ Light theme</button>'
+      +  '<button type="button" class="chip on" data-v="dark">☾ Dark theme</button></div>';
+
+    h += '<div class="uph">Mesra pengguna (UX)</div><span class="uhint">Tandakan apa yang penting untuk orang yang akan guna.</span>';
+    h += '<div class="chips" role="group" aria-label="Ciri mesra pengguna" data-group="ux-'+p+'" data-multi="1">';
+    UX_OPTS.forEach(function(o,i){
+      h += '<button type="button" class="chip'+(UX_DEFAULT[p].indexOf(i)>-1?' on':'')+'" data-v="'+esc(o.v)+'">'+esc(o.l)+'</button>';
+    });
+    h += '</div>';
+    box.innerHTML = h;
+  });
+
+  document.addEventListener("change", function(e){
+    var r = e.target;
+    if(!r || r.type !== "radio" || !r.closest || !r.closest(".ustyles")) return;
+    $$(".usty", r.closest(".ustyles")).forEach(function(l){
+      l.classList.toggle("sel", l.querySelector("input").checked);
+    });
+    renderPrompts();
+  });
+}
+
+function uiText(p){
+  var r = $('input[name="ui-'+p+'"]:checked');
+  var st = UI_STYLES.filter(function(s){ return r && s.id === r.value; })[0] || UI_STYLES[0];
+  var th = chipVals("tema-"+p), ux = chipVals("ux-"+p);
+  var o = "REKA BENTUK ANTARAMUKA (UI/UX)\n";
+  o += "- Pastikan interface menggunakan UI " + st.id + " (" + lc(st.d) + ").\n";
+  if(th.length === 2) o += "- Ada light theme dan dark theme, dengan satu butang tukar yang senang dijumpai.\n";
+  else if(th[0] === "light") o += "- Light theme sahaja.\n";
+  else if(th[0] === "dark")  o += "- Dark theme sahaja.\n";
+  if(ux.length){
+    o += "- Supaya mudah digunakan oleh pengguna saya:\n";
+    ux.forEach(function(x){ o += "  - " + x + "\n"; });
+  }
+  return o;
+}
+
+/* ---------- simpan & pulihkan isian builder ---------- */
+function persistBuilders(){
+  var fb = {};
+  $$(".fbin").forEach(function(el){ fb["t:"+el.dataset.t] = el.value; });
+  $$("[data-group]").forEach(function(g){
+    var on = [];
+    $$(".chip", g).forEach(function(c,i){ if(c.classList.contains("on")) on.push(i); });
+    fb["g:"+g.dataset.group] = on;
+  });
+  $$(".ustyles").forEach(function(g){
+    var r = $("input:checked", g);
+    fb["s:"+g.dataset.ui] = r ? r.value : "";
+  });
+  state.fb = fb; save();
+}
+function restoreBuilders(){
+  var fb = state.fb; if(!fb) return;
+  $$(".fbin").forEach(function(el){
+    var k = "t:"+el.dataset.t;
+    if(typeof fb[k] === "string") el.value = fb[k];
+  });
+  $$("[data-group]").forEach(function(g){
+    var on = fb["g:"+g.dataset.group];
+    if(!Array.isArray(on)) return;
+    $$(".chip", g).forEach(function(c,i){ c.classList.toggle("on", on.indexOf(i) > -1); });
+  });
+  $$(".ustyles").forEach(function(g){
+    var v = fb["s:"+g.dataset.ui]; if(!v) return;
+    $$(".usty", g).forEach(function(l){
+      var inp = l.querySelector("input");
+      inp.checked = (inp.value === v);
+      l.classList.toggle("sel", inp.checked);
+    });
+  });
+}
 
 function renderPrompts(){
   $$("pre.prompt[data-tpl]").forEach(function(pre){
     var fn = TPL[pre.dataset.tpl];
     if(fn){ try{ pre.textContent = fn(); }catch(e){} }
   });
+  persistBuilders();
 }
 
 /* chips */
@@ -2018,6 +2454,7 @@ document.addEventListener("click", function(e){
     $$(".chip", g).forEach(function(x){ x.classList.remove("on"); });
     c.classList.add("on");
   }
+  $$(".chip", g).forEach(function(x){ x.setAttribute("aria-pressed", x.classList.contains("on") ? "true" : "false"); });
   renderPrompts();
 });
 document.addEventListener("input", function(e){
@@ -2122,6 +2559,8 @@ document.addEventListener("click", function(e){
   var id = c.dataset.id;
   state.chk[id] = !state.chk[id];
   c.classList.toggle("on", !!state.chk[id]);
+  c.setAttribute("aria-checked", state.chk[id] ? "true" : "false");
+  c.classList.remove("pop"); void c.offsetWidth; if(state.chk[id]) c.classList.add("pop");
   save(); refreshSteps(); refreshProgress();
 });
 
@@ -2342,8 +2781,9 @@ $("#genCert").addEventListener("click", function(){
   save();
   paparSijil(state.cert);
   $("#mailStat").innerHTML="";
-  $("#certCard").scrollIntoView({behavior:"smooth", block:"center"});
+  $("#certCard").scrollIntoView({behavior:smooth(), block:"center"});
   toast("✓ Sijil dijana");
+  confetti();
 });
 
 /* ---------- muat turun ---------- */
@@ -2435,12 +2875,199 @@ var topBtn = $("#top");
 window.addEventListener("scroll", function(){
   topBtn.classList.toggle("on", window.scrollY > 500);
 });
-topBtn.addEventListener("click", function(){ window.scrollTo({top:0, behavior:"smooth"}); });
+topBtn.addEventListener("click", function(){ window.scrollTo({top:0, behavior:smooth()}); });
+
+/* ============================================================
+   TAB, AKSESIBILITI, MOTION, CONFETTI
+   ============================================================ */
+function showTab(name, noScroll){
+  var btn = document.getElementById("tabbtn-" + name), panel = document.getElementById("tab-" + name);
+  if(!btn || !panel) return;
+  $$(".tab").forEach(function(x){
+    var on = x === btn;
+    x.classList.toggle("on", on);
+    x.setAttribute("aria-selected", on ? "true" : "false");
+    x.tabIndex = on ? 0 : -1;
+  });
+  $$(".tabpanel").forEach(function(x){ x.classList.toggle("on", x === panel); });
+  state.tab = name; save();
+  if(!noScroll) window.scrollTo({top:0, behavior:smooth()});
+}
+
+function initA11y(){
+  toastEl.setAttribute("role","status");
+  toastEl.setAttribute("aria-live","polite");
+  var ms = $("#mailStat"); if(ms) ms.setAttribute("aria-live","polite");
+
+  /* tab */
+  var row = $(".tabrow");
+  row.setAttribute("role","tablist");
+  row.setAttribute("aria-label","Pilih bahagian nota");
+  $$(".tab").forEach(function(b){
+    b.setAttribute("role","tab");
+    b.id = "tabbtn-" + b.dataset.tab;
+    b.setAttribute("aria-controls","tab-" + b.dataset.tab);
+    b.addEventListener("click", function(){ showTab(b.dataset.tab); });
+  });
+  $$(".tabpanel").forEach(function(p){
+    p.setAttribute("role","tabpanel");
+    p.setAttribute("aria-labelledby","tabbtn-" + p.id.replace("tab-",""));
+  });
+  row.addEventListener("keydown", function(e){
+    var tabs = $$(".tab"), i = tabs.indexOf(document.activeElement);
+    if(i < 0) return;
+    var n = -1;
+    if(e.key === "ArrowRight") n = (i + 1) % tabs.length;
+    else if(e.key === "ArrowLeft") n = (i - 1 + tabs.length) % tabs.length;
+    else if(e.key === "Home") n = 0;
+    else if(e.key === "End") n = tabs.length - 1;
+    if(n < 0) return;
+    e.preventDefault(); tabs[n].focus(); showTab(tabs[n].dataset.tab, true);
+  });
+  var on = $(".tab.on");
+  if(on) showTab(on.dataset.tab, true);
+
+  /* accordion */
+  $$(".acctop").forEach(function(t){
+    t.setAttribute("role","button");
+    t.tabIndex = 0;
+    t.setAttribute("aria-expanded", t.parentElement.classList.contains("on") ? "true" : "false");
+  });
+
+  /* checkbox langkah */
+  $$(".chk").forEach(function(c){
+    c.setAttribute("role","checkbox");
+    c.tabIndex = 0;
+    c.setAttribute("aria-checked", state.chk[c.dataset.id] ? "true" : "false");
+  });
+
+  /* Enter / Space pada elemen custom */
+  document.addEventListener("keydown", function(e){
+    if(e.key !== "Enter" && e.key !== " ") return;
+    var el = e.target;
+    if(el && el.classList && (el.classList.contains("acctop") || el.classList.contains("chk"))){
+      e.preventDefault(); el.click();
+    }
+  });
+
+  /* label borang */
+  $$(".fb label").forEach(function(l,i){
+    var n = l.nextElementSibling;
+    if(n && /^(INPUT|SELECT|TEXTAREA)$/.test(n.tagName)){
+      if(!n.id) n.id = "fbf" + i;
+      l.setAttribute("for", n.id);
+    }else if(n && n.classList.contains("chips")){
+      n.setAttribute("role","group");
+      n.setAttribute("aria-label", l.textContent);
+    }
+  });
+
+  /* kotak kunci */
+  $$(".gate input, #d2gateform input").forEach(function(i){ i.setAttribute("aria-label","Masukkan kunci"); });
+
+  /* chip */
+  $$(".chip").forEach(function(c){ c.setAttribute("aria-pressed", c.classList.contains("on") ? "true" : "false"); });
+
+  var main = $(".wrap");
+  if(main && !main.getAttribute("role")) main.setAttribute("role","main");
+}
+
+var _io = null;
+function initMotion(){
+  var tb = $(".topbar"), rd = $("#rdFill"), heroR = $(".heroR");
+  var targets = $$(".sechead,.secintro,.minip,.step,.note,.acc,.tblwrap,.fb,.promptwrap,.certlock,footer");
+  targets.forEach(function(el){
+    el.classList.add("rv");
+    if(el.classList.contains("sechead")) el.classList.add("rv-l");
+    else if(el.classList.contains("fb") || el.classList.contains("promptwrap")) el.classList.add("rv-s");
+  });
+  var pending = targets.slice();
+
+  function show(el, instant){
+    if(instant) el.classList.add("nt");
+    el.classList.add("in");
+    var i = pending.indexOf(el); if(i > -1) pending.splice(i, 1);
+  }
+
+  if(RM || !("IntersectionObserver" in window)){
+    pending.slice().forEach(function(el){ show(el, true); });
+  }else{
+    _io = new IntersectionObserver(function(entries){
+      var vis = entries.filter(function(e){ return e.isIntersecting; })
+        .sort(function(a,b){ return a.boundingClientRect.top - b.boundingClientRect.top; });
+      vis.forEach(function(e,i){
+        e.target.style.setProperty("--d", Math.min(i * 90, 360) + "ms");
+        show(e.target, false);
+        _io.unobserve(e.target);
+      });
+      entries.forEach(function(e){
+        if(!e.isIntersecting && e.boundingClientRect.bottom < 0 && e.target.offsetParent){
+          show(e.target, true); _io.unobserve(e.target);
+        }
+      });
+    }, { rootMargin:"0px 0px -6% 0px", threshold:0 });
+    targets.forEach(function(el){ _io.observe(el); });
+  }
+
+  /* elemen yang terlepas kerana scroll laju: tunjuk terus tanpa animasi */
+  function sweep(){
+    if(!pending.length) return;
+    var gone = [];
+    for(var i = 0; i < pending.length; i++){
+      var el = pending[i];
+      if(!el.offsetParent) continue;
+      if(el.getBoundingClientRect().bottom < 0) gone.push(el);
+    }
+    gone.forEach(function(el){ show(el, true); if(_io) _io.unobserve(el); });
+  }
+
+  var ticking = false;
+  function onScroll(){
+    if(ticking) return; ticking = true;
+    requestAnimationFrame(function(){
+      ticking = false;
+      var y = window.pageYOffset || 0;
+      var max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      if(rd) rd.style.width = Math.min(100, y / max * 100).toFixed(2) + "%";
+      if(tb) tb.classList.toggle("sc", y > 8);
+      if(heroR && !RM) heroR.style.transform = y < 900 ? "translateY(" + Math.min(y * 0.06, 18).toFixed(1) + "px)" : "";
+      sweep();
+    });
+  }
+  window.addEventListener("scroll", onScroll, { passive:true });
+  window.addEventListener("resize", onScroll);
+  onScroll();
+}
+
+function confetti(){
+  if(RM) return;
+  var box = document.createElement("div");
+  box.className = "confetti"; box.setAttribute("aria-hidden","true");
+  var cols = ["#d97757","#6a9bcc","#788c5d","#faf9f5","#e8c36a"];
+  for(var i = 0; i < 48; i++){
+    var p = document.createElement("i");
+    p.style.left = (Math.random() * 100) + "%";
+    p.style.width = (7 + Math.random() * 7) + "px";
+    p.style.height = (10 + Math.random() * 9) + "px";
+    p.style.background = cols[i % cols.length];
+    p.style.animationDuration = (1.9 + Math.random() * 1.6) + "s";
+    p.style.animationDelay = (Math.random() * 0.5) + "s";
+    box.appendChild(p);
+  }
+  document.body.appendChild(box);
+  setTimeout(function(){ if(box.parentNode) box.parentNode.removeChild(box); }, 4400);
+}
 
 /* ---------- init ---------- */
+buildUiPickers();
+restoreBuilders();
 renderPrompts();
 refreshSteps();
 refreshProgress();
+var wantTab = state.tab;
+initA11y();
+initMotion();
+if(wantTab) showTab(wantTab, true);
 
 })();
 </script>

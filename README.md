@@ -15,6 +15,12 @@ Satu fail HTML yang mengandungi keseluruhan nota webinar dua hari:
 
 Kemajuan peserta disimpan dalam browser masing-masing. Tiada data dihantar ke mana-mana pelayan kecuali bila peserta tekan butang hantar sijil ke emel.
 
+## Pemilihan UI/UX
+
+Setiap builder prompt (nota, game, dashboard) ada pilihan gaya UI (10 gaya dengan pratonton visual), tema light/dark, dan ciri mesra pengguna. Pilihan terus masuk ke dalam prompt. Hari 1 ada jadual cadangan gaya ikut keadaan, lima peraturan UX, dan prompt semakan UX. Hari 2 guna pilihan yang sama untuk prompt peringkat paparan.
+
+Isian builder disimpan dalam browser, jadi peserta boleh sambung kemudian.
+
 ## Kunci
 
 Setiap hari dibuka dengan kunci yang diberi semasa sesi bermula. Kunci ditetapkan dalam `index.html`:
@@ -40,6 +46,8 @@ Biarkan kosong kalau mahu guna muat turun sahaja.
 
 ## Nota teknikal
 
+- Animasi muncul bila scroll, dan hormati tetapan *reduce motion* pada peranti
+- Boleh dikendalikan dengan papan kekunci (tab, accordion, kotak tanda)
 - Satu fail HTML, tiada proses build
 - Logo dan gambar terbenam sebagai data URI
 - jsPDF dimuat dari cdnjs untuk menjana sijil
